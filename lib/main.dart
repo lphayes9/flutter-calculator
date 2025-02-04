@@ -42,7 +42,24 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         } catch (e) {
           _result = 'Error';
         }
+      } 
+      // NEW FEATURE: SQUARE (x²)
+      else if (buttonText == 'x²') {
+        try {
+          // Evaluate the current expression first
+          Expression expression = Expression.parse(_expression);
+          final evaluator = const ExpressionEvaluator();
+          var evalResult = evaluator.eval(expression, {});
+          // Convert to double and square
+          double val = double.tryParse(evalResult.toString()) ?? 0.0;
+          double squared = val * val;
+          _expression = squared.toString();
+          _result = squared.toString();
+        } catch (e) {
+          _result = 'Error';
+        }
       } else {
+        // Append whatever button was pressed (digits/operators)
         _expression += buttonText;
       }
     });
@@ -131,6 +148,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     _buildButton('C', color: Colors.red),
                     _buildButton('=', color: Colors.green),
                     _buildButton('+', color: Colors.orange),
+                  ],
+                ),
+                // NEW ROW FOR x² BUTTON
+                Row(
+                  children: [
+                    _buildButton('x²', color: Colors.purple),
                   ],
                 ),
               ],
